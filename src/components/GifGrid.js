@@ -1,29 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import useFetchGifs from '../hooks/useFetchGifs';
+
+import { GifGridItem } from './GifGridItem';
 
 export const GifGrid = ({ category }) => {
-    useEffect(() => {
-        getGif();
-    }, []);
-
-    const getGif = async () => {
-        const url = `http://api.giphy.com/v1/gifs/search?api_key=eLMEMKV5EGubC9WLrIcH401M1bkps7fZ&q=%09cheeseburgers&limit=10`;
-        const resp = await fetch(url);
-
-        const { data } = await resp.json();
-        const gifs = data.map((img) => {
-            return {
-                id: img.id,
-                title: img.title,
-                url: img.images?.downsized_medium.url,
-            };
-        });
-
-        console.log(gifs);
-    };
+    const { data: images, loading } = useFetchGifs(category);
 
     return (
         <>
-            <h3>{category}</h3>
+            <h3 className="animate__animated animate__fadeIn">{category}</h3>
+            {loading && (
+                <div className="sk-circle">
+                    <div className="sk-circle1 sk-child"></div>
+                    <div className="sk-circle2 sk-child"></div>
+                    <div className="sk-circle3 sk-child"></div>
+                    <div className="sk-circle4 sk-child"></div>
+                    <div className="sk-circle5 sk-child"></div>
+                    <div className="sk-circle6 sk-child"></div>
+                    <div className="sk-circle7 sk-child"></div>
+                    <div className="sk-circle8 sk-child"></div>
+                    <div className="sk-circle9 sk-child"></div>
+                    <div className="sk-circle10 sk-child"></div>
+                    <div className="sk-circle11 sk-child"></div>
+                    <div className="sk-circle12 sk-child"></div>
+                </div>
+            )}
+            <div className="card-grid">
+                {images.map((img) => (
+                    <GifGridItem key={img.id} {...img} />
+                ))}
+            </div>
         </>
     );
 };
